@@ -31,7 +31,10 @@ handle_info(timeout, #state{ticker=Ticker, last_trade_id=Last}=State) ->
             Trade -> {Trade#trade.id, [Trade|Unpacked]}
         end
     end, {Last, []}, Trades),
-    gen_event:notify(polla_trades_evt, lists:reverse(Unpacked)),
+    case Unpacked of
+        [] -> ok;
+        Unpacked -> gen_event:notify(polla_trades_evt, lists:reverse(Unpacked))
+    end,
     NewState = State#state{
         last_call=os:timestamp(),
         last_trade_id=NewLast
