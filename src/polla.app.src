@@ -1,0 +1,12 @@
+{application, polla,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { polla_app, []}},
+  {env, []}
+ ]}.
