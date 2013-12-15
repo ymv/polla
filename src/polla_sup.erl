@@ -24,6 +24,7 @@ start_link() ->
 
 init([]) ->
     {ok, { {one_for_one, 5, 10}, [
+        ?CHILD(polla_database, worker, [foo]),
         ?CHILD(polla_trades, worker, [1000])
     ]} }.
 

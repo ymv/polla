@@ -14,7 +14,9 @@ start_link(Delay) ->
 
 
 init(Delay) ->
-    State = #state{last_call = os:timestamp(), delay = Delay, ticker={btce, btc, usd}, last_trade_id=0},
+    Ticker = {btce, btc, usd},
+    {ok, LastTrade} = polla_database:get_last_trade_id(Ticker),
+    State = #state{last_call = os:timestamp(), delay = Delay, ticker=Ticker, last_trade_id=LastTrade},
     {ok, State, timeout(State)}.
 
 handle_call(_Msg, _From, State) ->

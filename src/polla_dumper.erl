@@ -6,8 +6,9 @@
 
 init(_) -> {ok, null}.
 
-handle_event(Message, null) ->
-	io:format("Dumping: ~p~n", [Message]),
+handle_event(Trades, null) ->
+	io:format("Dumping ~p trades~n", [erlang:length(Trades)]),
+    polla_database:store_trades(Trades),
 	{ok, null}.
 
 handle_call(_Request, null) ->
