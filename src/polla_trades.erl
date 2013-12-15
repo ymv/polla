@@ -25,14 +25,13 @@ handle_cast(_Msg, State) ->
 
 handle_info(timeout, #state{ticker=Ticker, last_trade_id=Last}=State) ->
     {ok, Trades} = polla_util:get_json("https://btc-e.com/api/2/btc_usd/trades"),
-    NewLast = lists:foldr(fun (Struct, Acc) -> 
+    {NewLast, Unpacked} = lists:foldr(fun (Struct, {NewLast, Unpacked}) -> 
         case unpack_transaction(Struct, Ticker, Last) of
-            skip -> Acc;
-            Trade ->
-                gen_event:notify(polla_trades_evt, Trade),
-                Trade#trade.id
+            skip -> {NewLast, Unpacked};
+            Trade -> {Trade#trade.id, [Trade|Unpacked]}
         end
-    end, Last, Trades),
+    end, {Last, []}, Trades),
+    gen_event:notify(polla_trades_evt, lists:reverse(Unpacked)),
     NewState = State#state{
         last_call=os:timestamp(),
         last_trade_id=NewLast
