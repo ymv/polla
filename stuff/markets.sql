@@ -6,3 +6,12 @@ CREATE TABLE trade__btce_btc_usd (
 	amount	NUMERIC(16,8)	NOT NULL,
 	price	NUMERIC(16,8)	NOT NULL
 );
+CREATE TABLE trade__china_btc_cny (
+	id	INTEGER	PRIMARY KEY,
+	timestamp	INTEGER	NOT NULL,
+	type	trade_direction	NOT NULL,
+	amount	NUMERIC(16,8)	NOT NULL,
+	price	NUMERIC(16,8)	NOT NULL
+);
+
+INSERT INTO trade__china_btc_cny values(3821900, 0, 'bid', 0, 0);

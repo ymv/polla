@@ -20,6 +20,7 @@ launch() ->
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
+    gen_event:start_link({local, polla_trades_evt}),
     R = polla_sup:start_link(),
     gen_event:add_sup_handler(polla_trades_evt, polla_dumper, []),
     R.

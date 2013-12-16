@@ -4,10 +4,16 @@
 
 -export([init/1, handle_event/2, handle_call/2, handle_info/2, terminate/2, code_change/3]).
 
+-include("polla.hrl").
+
 init(_) -> {ok, null}.
 
 handle_event(Trades, null) ->
-	io:format("Dumping ~p trades~n", [erlang:length(Trades)]),
+    {First, N} = case Trades of
+        [] -> {null, 0};
+        [#trade{ticker=Ticker}|_] -> {Ticker, erlang:length(Trades)}
+    end,
+	io:format("Dumping ~p trades (~p)~n", [N, First]),
     polla_database:store_trades(Trades),
 	{ok, null}.
 
